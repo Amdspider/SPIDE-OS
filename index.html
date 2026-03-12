@@ -633,6 +633,7 @@ select.inp{appearance:none;cursor:pointer}
       <button class="nb"     onclick="go('history')"  id="nb-history">◷<span class="tip">History</span></button>
       <div class="sb-bot">
         <button class="nb"   onclick="go('account')"  id="nb-account">◉<span class="tip">Account</span></button>
+        <button class="nb"   onclick="go('settings')" id="nb-settings">⚙<span class="tip">Settings & API Key</span></button>
       </div>
     </nav>
 
@@ -866,6 +867,118 @@ select.inp{appearance:none;cursor:pointer}
         </div>
       </div>
 
+      <!-- ── SETTINGS ── -->
+      <div class="page" id="page-settings">
+        <div class="sec-hdr">
+          <div class="sec-title">SETTINGS<small>AI COACH & PREFERENCES</small></div>
+          <span class="badge" id="key-status-badge" style="background:rgba(255,255,255,.05);color:var(--mut);border:1px solid var(--br)">NO KEY</span>
+        </div>
+
+        <!-- API KEY CARD -->
+        <div class="card" style="margin-bottom:14px;border-color:rgba(230,51,41,.22)">
+          <div class="card-t"><span class="ac">🔑</span> Claude API Key — AI Coach</div>
+
+          <!-- How it works info strip -->
+          <div style="background:rgba(0,176,255,.06);border:1px solid rgba(0,176,255,.18);border-radius:10px;padding:13px 15px;margin-bottom:18px;display:flex;gap:13px;align-items:flex-start">
+            <span style="font-size:22px;flex-shrink:0">🔒</span>
+            <div>
+              <div style="font-family:var(--fd);font-size:11px;font-weight:700;color:var(--bl3);letter-spacing:1px;margin-bottom:4px">100% PRIVATE — STORED ON YOUR DEVICE ONLY</div>
+              <div style="font-size:12px;color:var(--mut);line-height:1.7;font-weight:500">Your API key is saved in your browser's localStorage. It <strong style="color:var(--wht)">never appears in the code</strong>, never gets uploaded to GitHub, and is never sent anywhere except directly to Anthropic's servers when you use the AI Coach.</div>
+            </div>
+          </div>
+
+          <!-- Key input area -->
+          <div style="margin-bottom:16px">
+            <label class="lbl-small">YOUR CLAUDE API KEY</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="password" class="inp" id="api-key-input" placeholder="sk-ant-api03-..." style="font-family:monospace;letter-spacing:1px;flex:1" oninput="updateKeyStatus()">
+              <button class="btn" onclick="saveApiKey()" style="white-space:nowrap;flex-shrink:0">SAVE KEY</button>
+            </div>
+            <div id="key-feedback" style="margin-top:8px;font-size:12px;display:none"></div>
+          </div>
+
+          <!-- Show/hide toggle -->
+          <div class="tgl-row" style="margin-bottom:16px">
+            <label class="tgl"><input type="checkbox" id="show-key-toggle" onchange="toggleShowKey(this.checked)"><span class="tgl-sl"></span></label>
+            <span class="tgl-lb">Show key while typing</span>
+          </div>
+
+          <!-- Current key status -->
+          <div id="key-current-status" style="padding:12px 15px;background:rgba(255,255,255,.04);border:1px solid var(--br);border-radius:10px;margin-bottom:16px">
+            <div style="font-size:10px;color:var(--mut);letter-spacing:1.5px;font-family:var(--fd);margin-bottom:5px">CURRENT STATUS</div>
+            <div id="key-stored-display" style="font-size:13px;font-weight:600"></div>
+          </div>
+
+          <!-- Remove key button -->
+          <button class="btn dng" id="remove-key-btn" onclick="removeApiKey()" style="display:none">🗑 REMOVE SAVED KEY</button>
+        </div>
+
+        <!-- HOW TO GET KEY CARD -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-t"><span class="ac">📖</span> How to Get Your API Key (Free)</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--br);align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--red),#c0392b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;color:#fff;flex-shrink:0">1</div>
+              <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Go to console.anthropic.com</div><div style="font-size:11px;color:var(--mut);line-height:1.6">Create a free Anthropic account if you don't have one.</div></div>
+            </div>
+            <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--br);align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--red),#c0392b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;color:#fff;flex-shrink:0">2</div>
+              <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Click "API Keys" in the sidebar</div><div style="font-size:11px;color:var(--mut);line-height:1.6">Then click "Create Key" — give it any name like "SPIDER OS".</div></div>
+            </div>
+            <div style="display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--br);align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--red),#c0392b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;color:#fff;flex-shrink:0">3</div>
+              <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Copy the key</div><div style="font-size:11px;color:var(--mut);line-height:1.6">It starts with <span style="font-family:monospace;color:var(--bl3);font-size:11px">sk-ant-</span> — copy the whole thing. You only see it once!</div></div>
+            </div>
+            <div style="display:flex;gap:14px;padding:13px 0;align-items:flex-start">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--grn),#00c853);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;color:#000;flex-shrink:0">4</div>
+              <div><div style="font-size:13px;font-weight:700;margin-bottom:3px">Paste it above and click Save</div><div style="font-size:11px;color:var(--mut);line-height:1.6">Your AI Coach activates instantly. Anthropic gives ~$5 free credits to start.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECURITY EXPLAINER CARD -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-t"><span class="ac">🛡</span> Security Explained</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--br)">
+              <span style="font-size:18px">✅</span>
+              <div><div style="font-size:12px;font-weight:700;margin-bottom:2px;color:var(--grn)">Stored only on this device</div><div style="font-size:11px;color:var(--mut);line-height:1.5">Saved in your browser localStorage — same place as all your app data.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--br)">
+              <span style="font-size:18px">✅</span>
+              <div><div style="font-size:12px;font-weight:700;margin-bottom:2px;color:var(--grn)">Never in GitHub code</div><div style="font-size:11px;color:var(--mut);line-height:1.5">The app code on GitHub has zero keys. Anyone who downloads your app must use their own key.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--br)">
+              <span style="font-size:18px">✅</span>
+              <div><div style="font-size:12px;font-weight:700;margin-bottom:2px;color:var(--grn)">Direct to Anthropic only</div><div style="font-size:11px;color:var(--mut);line-height:1.5">Requests go from your browser → Anthropic's API. No middleman, no logging.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 0">
+              <span style="font-size:18px">⚠️</span>
+              <div><div style="font-size:12px;font-weight:700;margin-bottom:2px;color:var(--gld)">Don't use on shared devices</div><div style="font-size:11px;color:var(--mut);line-height:1.5">Anyone with access to this browser on this device could see localStorage. Keep it personal.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- APP INFO -->
+        <div class="card">
+          <div class="card-t"><span class="ac">ℹ️</span> App Info</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="background:rgba(255,255,255,.03);border:1px solid var(--br);border-radius:9px;padding:12px;text-align:center">
+              <div style="font-family:var(--fh);font-size:22px;color:var(--red)">SPIDER OS</div>
+              <div style="font-size:9px;color:var(--mut);letter-spacing:1.5px;margin-top:3px">PERFORMANCE MULTIVERSE</div>
+            </div>
+            <div style="background:rgba(255,255,255,.03);border:1px solid var(--br);border-radius:9px;padding:12px;text-align:center">
+              <div style="font-family:var(--fh);font-size:22px;color:var(--bl3)" id="settings-habit-count">--</div>
+              <div style="font-size:9px;color:var(--mut);letter-spacing:1.5px;margin-top:3px">DAYS TRACKED</div>
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn dng" onclick="clearAllData()" style="width:100%;font-size:10px">🗑 CLEAR ALL APP DATA</button>
+          </div>
+        </div>
+      </div>
+      <!-- end settings page -->
+
     </main>
   </div>
 </div>
@@ -951,10 +1064,11 @@ select.inp{appearance:none;cursor:pointer}
 <script>
 'use strict';
 // ─────────────────────────────────────────────
-//  ⚠️  PASTE YOUR CLAUDE API KEY HERE  ⚠️
-//  Get it from: console.anthropic.com → API Keys
+//  API key is stored securely in localStorage
+//  Set it in the Settings page (⚙ icon in sidebar)
+//  It never appears in code or GitHub
 // ─────────────────────────────────────────────
-const CLAUDE_KEY = 'PASTE_YOUR_CLAUDE_API_KEY_HERE';
+const getKey = () => localStorage.getItem('spider_claude_key') || '';
 
 // ════════════════════════════════════════════
 //  CURSOR
@@ -1403,8 +1517,9 @@ function addMsg(role,text){
 function showTyping(v){const t=document.getElementById('typing-ind');t.style.display=v?'flex':'none';document.getElementById('coach-msgs').scrollTop=99999;}
 
 async function callClaude(userMsg){
-  if(CLAUDE_KEY==='PASTE_YOUR_CLAUDE_API_KEY_HERE'){
-    addMsg('ai','⚠️ **AI Coach not connected.**\n\nPaste your Claude API key in the source code where it says `PASTE_YOUR_CLAUDE_API_KEY_HERE`.\n\nGet your key at **console.anthropic.com → API Keys** (it starts with `sk-ant-...`)');
+  const CLAUDE_KEY = getKey();
+  if(!CLAUDE_KEY){
+    addMsg('ai','⚠️ **API key not set.**\n\nGo to the **⚙ Settings** page (bottom of the sidebar) and paste your Claude API key.\n\nGet your free key at **console.anthropic.com → API Keys** — it starts with `sk-ant-...`\n\nYour key is stored only on this device and never shared anywhere.');
     return;
   }
   showTyping(true);
@@ -1525,7 +1640,7 @@ function quickAsk(q){
 
 // Auto AI analysis
 async function runAutoAnalysis(){
-  if(CLAUDE_KEY==='PASTE_YOUR_CLAUDE_API_KEY_HERE')return;
+  if(!getKey())return;
   const score=calcScore(),w=state.waterCount,wg=state.waterGoal||8;
   const c=(state.foods||[]).reduce((s,f)=>s+(f.cal||0),0);
   const prot=(state.foods||[]).reduce((s,f)=>s+(f.prot||0),0);
@@ -1573,6 +1688,7 @@ function go(name){
   document.getElementById(`nb-${name}`)?.classList.add('act');
   renderAll();
   if(name==='history')renderHistory();
+  if(name==='settings')renderSettings();
 }
 
 // ════════════════════════════════════════════
@@ -1840,6 +1956,108 @@ function showDayDetail(k,day,month,year){
   if(se)se.innerHTML=[['Score',h.score||0,'var(--red)'],['Water',(h.water||0)+'gl','var(--bl3)'],['Calories',h.calories||0,'var(--gld)']].map(([l,v,c])=>`<div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:11px;text-align:center"><div style="font-family:var(--fh);font-size:22px;color:${c}">${v}</div><div style="font-size:9px;color:var(--mut);letter-spacing:1px">${l}</div></div>`).join('');
   if(he){const di=h.done||[];he.innerHTML=`<div style="font-size:9px;color:var(--mut);margin-bottom:7px;letter-spacing:2px">HABITS (${di.length}/${state.habits.length})</div>`+state.habits.map(hb=>{const dn=di.includes(hb.id);return `<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="width:17px;height:17px;border-radius:4px;background:${dn?'var(--red)':'rgba(255,255,255,.05)'};border:1px solid ${dn?'var(--red)':'rgba(255,255,255,.09)'};display:flex;align-items:center;justify-content:center;font-size:10px;color:${dn?'#fff':'var(--mut)'}">${dn?'✓':''}</span><span style="font-size:12px;font-weight:600;color:${dn?'var(--wht)':'var(--mut)'}">${hb.emoji||'•'} ${hb.name}</span></div>`;}).join('');}
   panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ════════════════════════════════════════════
+//  SETTINGS — SECURE API KEY MANAGEMENT
+// ════════════════════════════════════════════
+function renderSettings(){
+  const key = localStorage.getItem('spider_claude_key') || '';
+  const inp = document.getElementById('api-key-input');
+  const disp = document.getElementById('key-stored-display');
+  const badge = document.getElementById('key-status-badge');
+  const removeBtn = document.getElementById('remove-key-btn');
+  const feedback = document.getElementById('key-feedback');
+
+  // Show masked version of saved key
+  if(key){
+    if(inp && !inp.value) inp.value = key; // pre-fill
+    if(disp) disp.innerHTML = `<span style="color:var(--grn)">✓ Key saved</span> <span style="font-family:monospace;color:var(--mut);font-size:11px">${key.substring(0,12)}···${key.slice(-4)}</span>`;
+    if(badge){ badge.textContent='KEY ACTIVE'; badge.style.background='rgba(0,230,118,.1)'; badge.style.color='var(--grn)'; badge.style.border='1px solid rgba(0,230,118,.25)'; }
+    if(removeBtn) removeBtn.style.display='block';
+    if(feedback){ feedback.style.display='none'; }
+  } else {
+    if(disp) disp.innerHTML = `<span style="color:var(--mut)">No key saved — AI Coach is disabled</span>`;
+    if(badge){ badge.textContent='NO KEY'; badge.style.background='rgba(255,255,255,.05)'; badge.style.color='var(--mut)'; badge.style.border='1px solid var(--br)'; }
+    if(removeBtn) removeBtn.style.display='none';
+  }
+
+  // Days tracked count
+  const dtEl = document.getElementById('settings-habit-count');
+  if(dtEl) dtEl.textContent = Object.keys(state.history||{}).filter(k=>(state.history[k]?.done||[]).length>0).length;
+}
+
+function saveApiKey(){
+  const inp = document.getElementById('api-key-input');
+  const feedback = document.getElementById('key-feedback');
+  const key = inp?.value.trim() || '';
+
+  if(!key){
+    showFeedback(feedback, 'warn', '⚠ Please paste your API key first.');
+    return;
+  }
+  if(!key.startsWith('sk-ant-')){
+    showFeedback(feedback, 'warn', '⚠ Key should start with sk-ant- — double check you copied it correctly.');
+    return;
+  }
+  if(key.length < 40){
+    showFeedback(feedback, 'warn', '⚠ Key looks too short — make sure you copied the full key.');
+    return;
+  }
+
+  localStorage.setItem('spider_claude_key', key);
+  showFeedback(feedback, 'good', '✓ Key saved securely to this device. AI Coach is now active!');
+  renderSettings();
+  showToast('good', '🤖 AI Coach Active!', 'Your API key is saved. Open the AI Coach to start!');
+
+  // Refresh coach status
+  setTimeout(()=>{
+    if(document.getElementById('coach-fab')) document.getElementById('coach-fab').classList.add('vis');
+  }, 300);
+}
+
+function removeApiKey(){
+  if(!confirm('Remove your saved API key? The AI Coach will stop working until you add a new one.')) return;
+  localStorage.removeItem('spider_claude_key');
+  const inp = document.getElementById('api-key-input');
+  if(inp) inp.value = '';
+  renderSettings();
+  showToast('info', '🗑 Key Removed', 'API key cleared from this device.');
+}
+
+function toggleShowKey(show){
+  const inp = document.getElementById('api-key-input');
+  if(inp) inp.type = show ? 'text' : 'password';
+}
+
+function updateKeyStatus(){
+  const inp = document.getElementById('api-key-input');
+  const feedback = document.getElementById('key-feedback');
+  if(!inp || !feedback) return;
+  const v = inp.value.trim();
+  if(v.length > 10){
+    if(v.startsWith('sk-ant-')) showFeedback(feedback, 'good', '✓ Format looks correct');
+    else showFeedback(feedback, 'warn', '⚠ Key should start with sk-ant-');
+  } else {
+    feedback.style.display = 'none';
+  }
+}
+
+function showFeedback(el, type, msg){
+  if(!el) return;
+  const colors = { good:'var(--grn)', warn:'#ff6b35', info:'var(--bl3)' };
+  el.style.color = colors[type] || 'var(--mut)';
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function clearAllData(){
+  if(!confirm('⚠ This will delete ALL your habit history, food logs, workout data and profile. Are you sure?')) return;
+  const key = localStorage.getItem('spider_claude_key'); // preserve key
+  localStorage.clear();
+  if(key) localStorage.setItem('spider_claude_key', key); // restore key
+  showToast('info', '🗑 Data Cleared', 'All app data removed. Reload to start fresh.');
+  setTimeout(()=>location.reload(), 1500);
 }
 
 // ════════════════════════════════════════════
