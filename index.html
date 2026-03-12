@@ -567,6 +567,13 @@
     <button class="nav-btn" onclick="showPage('analytics')" id="nav-analytics">
       ≈<span class="tooltip">Analytics</span>
     </button>
+    <button class="nav-btn" onclick="showPage('history')" id="nav-history">
+      ◷<span class="tooltip">History</span>
+    </button>
+    <div style="flex:1;"></div>
+    <button class="nav-btn" onclick="showPage('account')" id="nav-account">
+      ◉<span class="tooltip">Account</span>
+    </button>
   </nav>
 
   <!-- MAIN CONTENT -->
@@ -862,6 +869,139 @@
           <div class="chart-wrap">
             <canvas id="chart-score"></canvas>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ HISTORY PAGE ═══════════════ -->
+    <div class="page" id="page-history">
+      <div class="section-header">
+        <div class="section-title">HISTORY</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn secondary" style="padding:6px 12px;font-size:13px;" onclick="changeMonth(-1)">‹</button>
+          <span id="history-month-label" style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;min-width:160px;text-align:center;"></span>
+          <button class="btn secondary" style="padding:6px 12px;font-size:13px;" onclick="changeMonth(1)">›</button>
+        </div>
+      </div>
+
+      <!-- Month summary stats -->
+      <div class="top-stats" style="margin-bottom:20px;" id="hist-month-stats">
+        <div class="stat-card"><div class="label">Avg Score</div><div class="value accent" id="hist-avg-score">--</div><div class="sub">this month</div></div>
+        <div class="stat-card"><div class="label">Perfect Days</div><div class="value blue" id="hist-perfect">0</div><div class="sub">100% habits</div></div>
+        <div class="stat-card"><div class="label">Avg Water</div><div class="value purple" id="hist-avg-water">0</div><div class="sub">glasses/day</div></div>
+        <div class="stat-card"><div class="label">Avg Calories</div><div class="value orange" id="hist-avg-cal">0</div><div class="sub">kcal/day</div></div>
+      </div>
+
+      <!-- Calendar grid -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title"><span class="icon">📅</span> Monthly Calendar</div>
+        <div id="history-cal-header" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px;"></div>
+        <div id="history-calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;"></div>
+        <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+          <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;background:var(--accent);border-radius:3px;display:inline-block;"></span>Perfect day</span>
+          <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;background:rgba(232,255,71,0.3);border-radius:3px;display:inline-block;"></span>Partial</span>
+          <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="width:12px;height:12px;background:var(--surface2);border-radius:3px;display:inline-block;"></span>No data</span>
+        </div>
+      </div>
+
+      <!-- Day detail panel -->
+      <div class="card" id="hist-day-detail" style="display:none;">
+        <div class="card-title"><span class="icon">📋</span> <span id="hist-detail-date">Select a day</span></div>
+        <div class="grid-3" id="hist-detail-stats"></div>
+        <div class="divider"></div>
+        <div id="hist-detail-habits"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ ACCOUNT PAGE ═══════════════ -->
+    <div class="page" id="page-account">
+      <div class="section-header">
+        <div class="section-title">ACCOUNT</div>
+        <span class="badge" id="sync-status-badge">NOT SIGNED IN</span>
+      </div>
+
+      <!-- Login panel -->
+      <div id="auth-panel">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title"><span class="icon">🔑</span> Sign In / Register</div>
+            <p style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Sign in to sync your data across all your devices. Your habits, workouts, nutrition and water data will be saved to the cloud.</p>
+            <div style="margin-bottom:10px;">
+              <div class="modal-label">Email</div>
+              <input type="email" class="input-field" id="auth-email" placeholder="you@email.com" style="width:100%;margin-top:6px;">
+            </div>
+            <div style="margin-bottom:16px;">
+              <div class="modal-label">Password</div>
+              <input type="password" class="input-field" id="auth-password" placeholder="••••••••" style="width:100%;margin-top:6px;">
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn" onclick="authSignIn()">SIGN IN</button>
+              <button class="btn secondary" onclick="authRegister()">CREATE ACCOUNT</button>
+            </div>
+            <div style="margin-top:12px;">
+              <button class="btn secondary" onclick="authGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;">
+                <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                CONTINUE WITH GOOGLE
+              </button>
+            </div>
+            <div id="auth-error" style="color:var(--red);font-size:12px;margin-top:10px;display:none;"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="icon">☁️</span> Why Sign In?</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="font-size:20px;">📱</span>
+                <div><div style="font-size:13px;margin-bottom:3px;">Any Device</div><div style="font-size:11px;color:var(--muted);">Open SPIDER on phone, tablet or PC — your data follows you.</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="font-size:20px;">🔒</span>
+                <div><div style="font-size:13px;margin-bottom:3px;">Private & Secure</div><div style="font-size:11px;color:var(--muted);">Only you can see your data. Secured by Google Firebase.</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="font-size:20px;">💾</span>
+                <div><div style="font-size:13px;margin-bottom:3px;">Never Lose Data</div><div style="font-size:11px;color:var(--muted);">If you clear your phone, your history is safe in the cloud.</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="font-size:20px;">⚡</span>
+                <div><div style="font-size:13px;margin-bottom:3px;">Still Works Offline</div><div style="font-size:11px;color:var(--muted);">Use offline, syncs automatically when connected.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile panel (shown when logged in) -->
+      <div id="profile-panel" style="display:none;">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title"><span class="icon">◉</span> Profile</div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+              <div id="user-avatar" style="width:56px;height:56px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:28px;color:#000;"></div>
+              <div>
+                <div id="user-name" style="font-size:16px;font-weight:500;"></div>
+                <div id="user-email" style="font-size:12px;color:var(--muted);"></div>
+                <div id="last-sync" style="font-size:11px;color:var(--green);margin-top:3px;"></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button class="btn" onclick="syncToCloud()" style="width:100%;">☁ SYNC TO CLOUD NOW</button>
+              <button class="btn secondary" onclick="loadFromCloud()" style="width:100%;">⬇ LOAD FROM CLOUD</button>
+              <button class="btn danger" onclick="authSignOut()" style="width:100%;">SIGN OUT</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="icon">📊</span> Cloud Stats</div>
+            <div id="cloud-stats" style="display:flex;flex-direction:column;gap:10px;"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title"><span class="icon">⚙️</span> Auto Sync</div>
+          <div class="toggle-row">
+            <label class="toggle"><input type="checkbox" id="auto-sync-toggle" onchange="toggleAutoSync(this.checked)" checked><span class="toggle-slider"></span></label>
+            <span class="toggle-label">Automatically sync when online</span>
+          </div>
+          <p style="font-size:11px;color:var(--muted);">Data syncs every time you make a change while connected to the internet.</p>
         </div>
       </div>
     </div>
@@ -1733,6 +1873,297 @@ function showInstallBanner() {
   document.body.appendChild(b);
 }
 </script>
+
+<!-- ═══ HISTORY PAGE JS ═══ -->
+<script>
+let historyViewDate = new Date();
+
+window.changeMonth = (delta) => {
+  historyViewDate = new Date(historyViewDate.getFullYear(), historyViewDate.getMonth() + delta, 1);
+  const now = new Date();
+  if (historyViewDate > now) historyViewDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  renderHistory();
+};
+
+function renderHistory() {
+  const year = historyViewDate.getFullYear();
+  const month = historyViewDate.getMonth();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const label = document.getElementById('history-month-label');
+  if (label) label.textContent = `${monthNames[month]} ${year}`;
+
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  let scores=[], waters=[], cals=[], perfectDays=0;
+  for (let d=1; d<=daysInMonth; d++) {
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const h = state.history?.[key];
+    if (h && (h.done||[]).length > 0) {
+      scores.push(h.score||0);
+      waters.push(h.water||0);
+      cals.push(h.calories||0);
+      if ((h.done||[]).length >= (state.habits.length||1)) perfectDays++;
+    }
+  }
+  const avg = arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0;
+  const el = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  el('hist-avg-score', avg(scores)||'--');
+  el('hist-perfect', perfectDays);
+  el('hist-avg-water', avg(waters));
+  el('hist-avg-cal', avg(cals));
+
+  const header = document.getElementById('history-cal-header');
+  if (header) header.innerHTML = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div style="text-align:center;font-size:10px;color:var(--muted);padding:4px 0;">${d}</div>`).join('');
+
+  const cal = document.getElementById('history-calendar');
+  if (!cal) return;
+  cal.innerHTML = '';
+
+  const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+  for (let i=0; i<firstDay; i++) cal.innerHTML += `<div></div>`;
+
+  const todayStr = todayKey();
+  for (let d=1; d<=daysInMonth; d++) {
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const h = state.history?.[key];
+    const done = (h?.done||[]).length;
+    const total = state.habits.length||1;
+    const pct = done/total;
+    const isFuture = key > todayStr;
+    const isToday = key === todayStr;
+
+    let bg='var(--surface2)', color='var(--muted)', border='1px solid var(--border)';
+    if (!isFuture && done > 0) {
+      if (pct >= 1) { bg='var(--accent)'; color='#000'; border='none'; }
+      else if (pct >= 0.5) { bg='rgba(232,255,71,0.25)'; color='var(--accent)'; border='1px solid rgba(232,255,71,0.4)'; }
+      else { bg='rgba(232,255,71,0.08)'; color='var(--text)'; }
+    }
+    if (isToday) border='2px solid var(--accent3)';
+
+    const cell = document.createElement('div');
+    cell.style.cssText = `text-align:center;padding:6px 2px;border-radius:8px;background:${bg};color:${color};border:${border};cursor:${isFuture?'default':'pointer'};transition:all 0.15s;`;
+    cell.innerHTML = `<div style="font-size:13px;font-weight:500;">${d}</div><div style="font-size:9px;opacity:0.7;">${!isFuture&&done>0?(h?.score||0)+'pts':'&nbsp;'}</div>`;
+    if (!isFuture) cell.onclick = () => showDayDetail(key, d, month, year);
+    cal.appendChild(cell);
+  }
+}
+
+function showDayDetail(key, day, month, year) {
+  const mNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const h = state.history?.[key];
+  const panel = document.getElementById('hist-day-detail');
+  const dateEl = document.getElementById('hist-detail-date');
+  const statsEl = document.getElementById('hist-detail-stats');
+  const habEl = document.getElementById('hist-detail-habits');
+  if (!panel) return;
+  panel.style.display = 'block';
+  dateEl.textContent = `${mNames[month]} ${day}, ${year}`;
+
+  if (!h || (h.done||[]).length === 0) {
+    statsEl.innerHTML = '';
+    habEl.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0;">No data recorded for this day.</div>';
+    panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
+  }
+
+  statsEl.innerHTML = [
+    ['Score', h.score||0, 'var(--accent)'],
+    ['Water', (h.water||0)+'gl', 'var(--accent3)'],
+    ['Calories', (h.calories||0)+'kcal', 'var(--accent2)']
+  ].map(([l,v,c])=>`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;"><div style="font-family:var(--font-display);font-size:24px;color:${c};">${v}</div><div style="font-size:10px;color:var(--muted);">${l}</div></div>`).join('');
+
+  const doneIds = h.done||[];
+  habEl.innerHTML = `<div style="font-size:11px;color:var(--muted);margin-bottom:8px;margin-top:4px;">HABITS (${doneIds.length}/${state.habits.length})</div>` +
+    state.habits.map(hab => {
+      const done = doneIds.includes(hab.id);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="width:18px;height:18px;border-radius:4px;background:${done?'var(--accent)':'var(--surface2)'};border:1px solid ${done?'var(--accent)':'var(--border2)'};display:flex;align-items:center;justify-content:center;font-size:10px;color:${done?'#000':'var(--muted)'};">${done?'✓':''}</span>
+        <span style="font-size:13px;color:${done?'var(--text)':'var(--muted)'};">${hab.emoji||'•'} ${hab.name}</span>
+      </div>`;
+    }).join('');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// Extend showPage to render history
+const __origShowPage = showPage;
+showPage = function(name) {
+  __origShowPage(name);
+  if (name === 'history') renderHistory();
+};
+</script>
+
+<!-- ═══ FIREBASE AUTH + SYNC ═══ -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ════════════════════════════════════════
+//  🔥 PASTE YOUR FIREBASE CONFIG HERE
+//  → console.firebase.google.com
+//  → Your project → Project Settings → Your apps → SDK setup
+// ════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_API_KEY",
+  authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+  projectId: "PASTE_YOUR_PROJECT_ID",
+  storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
+};
+
+let app, auth, db, googleProvider;
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  googleProvider = new GoogleAuthProvider();
+} catch(e) {
+  console.warn('Firebase not configured yet:', e.message);
+}
+
+let currentUser = null;
+let autoSync = true;
+
+if (auth) {
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (user) { showProfilePanel(user); if(autoSync) loadFromCloud(); }
+    else showAuthPanel();
+  });
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  if(!el) return;
+  el.textContent = msg.replace('Firebase: ','').replace(/\(auth.*\)\./,'').trim();
+  el.style.display = 'block';
+  setTimeout(() => el.style.display='none', 5000);
+}
+
+function showProfilePanel(user) {
+  const ap=document.getElementById('auth-panel'), pp=document.getElementById('profile-panel');
+  if(ap) ap.style.display='none';
+  if(pp) pp.style.display='block';
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('user-name', user.displayName||'User');
+  el('user-email', user.email);
+  el('last-sync','✓ Signed in');
+  const av=document.getElementById('user-avatar');
+  if(av) av.textContent=(user.displayName||user.email||'U')[0].toUpperCase();
+  const sb=document.getElementById('sync-status-badge');
+  if(sb){sb.textContent='SYNCED';sb.className='badge badge-active';}
+  updateCloudStats();
+}
+
+function showAuthPanel() {
+  const ap=document.getElementById('auth-panel'), pp=document.getElementById('profile-panel');
+  if(ap) ap.style.display='block';
+  if(pp) pp.style.display='none';
+  const sb=document.getElementById('sync-status-badge');
+  if(sb){sb.textContent='NOT SIGNED IN';sb.className='badge badge-locked';}
+}
+
+window.authSignIn = async () => {
+  if(!auth) return showAuthError('Firebase not configured. See setup guide below.');
+  const email=document.getElementById('auth-email')?.value.trim();
+  const pass=document.getElementById('auth-password')?.value;
+  if(!email||!pass) return showAuthError('Enter email and password.');
+  try { await signInWithEmailAndPassword(auth,email,pass); }
+  catch(e){ showAuthError(e.message); }
+};
+
+window.authRegister = async () => {
+  if(!auth) return showAuthError('Firebase not configured. See setup guide below.');
+  const email=document.getElementById('auth-email')?.value.trim();
+  const pass=document.getElementById('auth-password')?.value;
+  if(!email||!pass) return showAuthError('Enter email and password.');
+  if(pass.length<6) return showAuthError('Password must be 6+ characters.');
+  try { await createUserWithEmailAndPassword(auth,email,pass); await syncToCloud(); }
+  catch(e){ showAuthError(e.message); }
+};
+
+window.authGoogle = async () => {
+  if(!auth) return showAuthError('Firebase not configured. See setup guide below.');
+  try { await signInWithPopup(auth,googleProvider); await syncToCloud(); }
+  catch(e){ showAuthError(e.message); }
+};
+
+window.authSignOut = async () => {
+  if(!auth) return;
+  await signOut(auth);
+};
+
+window.syncToCloud = async () => {
+  if(!currentUser||!db) return;
+  try {
+    await setDoc(doc(db,'users',currentUser.uid), {
+      habits: state.habits,
+      history: state.history||{},
+      foods: state.foods||[],
+      exercises: state.exercises||[],
+      prs: state.prs||{},
+      calorieGoal: state.calorieGoal||2200,
+      waterGoal: state.waterGoal||8,
+      updatedAt: new Date().toISOString()
+    });
+    const el=document.getElementById('last-sync');
+    if(el) el.textContent='✓ Synced '+new Date().toLocaleTimeString();
+    updateCloudStats();
+  } catch(e){ console.error('Sync error:',e); }
+};
+
+window.loadFromCloud = async () => {
+  if(!currentUser||!db) return;
+  try {
+    const snap = await getDoc(doc(db,'users',currentUser.uid));
+    if(snap.exists()){
+      const d=snap.data();
+      if(d.habits) state.habits=d.habits;
+      if(d.history) state.history=d.history;
+      if(d.foods) state.foods=d.foods;
+      if(d.exercises) state.exercises=d.exercises;
+      if(d.prs) state.prs=d.prs;
+      if(d.calorieGoal) state.calorieGoal=d.calorieGoal;
+      if(d.waterGoal) state.waterGoal=d.waterGoal;
+      const today=todayKey();
+      state.todayDone=state.history?.[today]?.done||[];
+      state.waterCount=state.history?.[today]?.water||0;
+      saveData(); renderAll();
+      const el=document.getElementById('last-sync');
+      if(el) el.textContent='✓ Loaded from cloud '+new Date().toLocaleTimeString();
+      updateCloudStats();
+    }
+  } catch(e){ console.error('Load error:',e); }
+};
+
+window.toggleAutoSync = (val) => { autoSync=val; };
+
+function updateCloudStats() {
+  const el=document.getElementById('cloud-stats');
+  if(!el) return;
+  el.innerHTML = [
+    ['Days tracked', Object.keys(state.history||{}).length, 'var(--accent)'],
+    ['Active habits', state.habits.length, 'var(--accent3)'],
+    ['Foods logged', (state.foods||[]).length, 'var(--accent2)'],
+    ['PRs tracked', Object.keys(state.prs||{}).length, 'var(--accent4)']
+  ].map(([l,v,c])=>`<div class="score-row"><div class="score-row-label" style="width:130px;">${l}</div><div style="color:${c};font-family:var(--font-display);font-size:18px;">${v}</div></div>`).join('');
+}
+
+// Auto-sync hook: whenever data is saved locally, push to cloud
+const _origSaveData = window.saveData;
+window.saveData = function() {
+  if(_origSaveData) _origSaveData();
+  if(currentUser && autoSync && db) {
+    clearTimeout(window._syncTimer);
+    window._syncTimer = setTimeout(syncToCloud, 2500);
+  }
+};
+</script>
+
+<style>
+  #history-calendar > div { min-height: 48px; }
+  @media (max-width:500px) { #history-calendar > div { min-height:36px; padding:4px 1px; } }
+</style>
 
 <style>
   .sidebar { padding-top: max(20px, env(safe-area-inset-top, 20px)); padding-bottom: env(safe-area-inset-bottom, 0); height: 100svh; }
