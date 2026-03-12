@@ -537,20 +537,78 @@ select.inp{appearance:none;cursor:pointer}
 .auth-feat:last-child{border:none}
 
 /* ─── RESPONSIVE ─── */
-@media(max-width:768px){
-  .main{padding:12px 10px}
-  .stats-row{grid-template-columns:1fr 1fr;gap:8px}
-  .g2,.g3{grid-template-columns:1fr}
-  .macro-rings{gap:12px}
-  .add-food-row{grid-template-columns:1fr 1fr}
-  .coach-box{width:100%;max-width:100%;height:78vh;border-radius:18px 18px 0 0}
-  #coach-panel{padding:0;align-items:flex-end}
+.mob-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:rgba(8,13,26,.97);border-top:1px solid rgba(230,51,41,.18);
+  backdrop-filter:blur(20px);
+  padding:8px 4px max(10px,env(safe-area-inset-bottom,10px));
+  grid-template-columns:repeat(8,1fr);gap:2px
 }
-@media(max-width:500px){
-  .sidebar{width:52px}.nb{width:38px;height:38px}
-  .hdr-title{font-size:34px}.sc .vl{font-size:28px}
-  .modal{width:98vw}.modal-actions{flex-direction:column}
-  #hist-cal>div{min-height:34px;padding:4px 1px}
+.mob-nb{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:transparent;border:none;cursor:pointer;padding:6px 2px;
+  border-radius:10px;transition:all .18s;color:var(--mut);
+  -webkit-tap-highlight-color:transparent
+}
+.mob-nb .m-ico{font-size:18px;line-height:1}
+.mob-nb .m-lbl{font-size:7px;font-family:var(--fd);letter-spacing:.3px;line-height:1;text-transform:uppercase}
+.mob-nb.act{color:var(--red)}
+.mob-nb.act .m-ico{filter:drop-shadow(0 0 5px var(--red))}
+@media(max-width:768px){
+  .sidebar{display:none}
+  .mob-nav{display:grid}
+  .main{padding:12px 12px 88px}
+  .hdr{margin-bottom:16px;padding-bottom:12px;flex-wrap:wrap;gap:8px}
+  .hdr-title{font-size:clamp(30px,8vw,50px)}
+  .hdr-title .vrs{font-size:8px;letter-spacing:4px}
+  .hdr-r{flex-direction:row;align-items:center;gap:7px}
+  .stats-row{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .g2,.g3{grid-template-columns:1fr;gap:10px}
+  .sc{padding:12px}.sc .vl{font-size:28px}.sc .lb,.sc .sb{font-size:8px}
+  .card{padding:14px}.card-t{font-size:9px;margin-bottom:10px}
+  .sec-hdr{margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .sec-title{font-size:22px}
+  .macro-rings{gap:10px;justify-content:center}
+  .mr-item svg{width:72px;height:72px}
+  .add-food-row{grid-template-columns:1fr 1fr;gap:6px}
+  .add-food-row input:first-child{grid-column:1/-1}
+  .add-food-row button{grid-column:1/-1}
+  #water-cups{height:60px}
+  .water-num{font-size:40px}
+  #coach-panel{padding:0;align-items:flex-end}
+  .coach-box{width:100%;max-width:100%;height:80vh;border-radius:18px 18px 0 0}
+  .coach-fab{bottom:76px;right:14px;width:50px;height:50px;font-size:20px}
+  #alert-zone{top:12px;right:10px;left:10px;max-width:none}
+  .toast{max-width:100%}
+  #hist-cal>div{min-height:38px;padding:4px 1px}
+  .modal{width:96vw;padding:20px}
+  .modal-actions{flex-direction:column;gap:6px}
+  .modal-actions .btn{width:100%}
+  .set-inp{width:64px}
+  .wk-lb{font-size:8px}.wk-dot{width:22px;height:22px;font-size:8px}
+  .ob-grid{grid-template-columns:1fr}
+  .ob-card{padding:20px 16px}
+}
+@media(max-width:430px){
+  .main{padding:10px 10px 84px}
+  .hdr-title{font-size:26px}
+  .hdr-title .vrs{display:none}
+  .date-box{padding:5px 10px}.date-box .dt{font-size:12px}
+  .sc .vl{font-size:24px}.sc{padding:10px}
+  .macro-rings{gap:8px}
+  .mr-item svg{width:60px;height:60px}.mr-vl{font-size:14px}.mr-lb{font-size:8px}
+  .add-food-row{gap:5px}
+  #hist-cal>div{min-height:30px;padding:3px 1px}
+  #hist-month{font-size:10px;min-width:110px;letter-spacing:.5px}
+  .goal-grid{grid-template-columns:1fr 1fr}
+  .quick-chips{gap:4px;padding:0 10px 8px}
+  .qc{font-size:7px;padding:3px 8px}
+  .wk-dot{width:20px;height:20px;border-radius:5px}
+  #intro-logo .big{font-size:clamp(52px,15vw,90px)}
+  #intro-logo .sub{letter-spacing:8px;font-size:13px}
+  .coach-fab{bottom:72px;right:10px}
+  .ob-nav .btn{width:100%}
+  .sec-hdr{flex-direction:column;align-items:flex-start}
 }
 </style>
 </head>
@@ -1015,6 +1073,18 @@ select.inp{appearance:none;cursor:pointer}
     </div>
   </div>
 </div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mob-nav" id="mob-nav">
+  <button class="mob-nb act" onclick="goMob('overview')" id="mnb-overview"><span class="m-ico">⬡</span><span class="m-lbl">Home</span></button>
+  <button class="mob-nb" onclick="goMob('habits')"    id="mnb-habits">  <span class="m-ico">✓</span><span class="m-lbl">Habits</span></button>
+  <button class="mob-nb" onclick="goMob('gym')"       id="mnb-gym">     <span class="m-ico">⊕</span><span class="m-lbl">Gym</span></button>
+  <button class="mob-nb" onclick="goMob('nutrition')" id="mnb-nutrition"><span class="m-ico">◎</span><span class="m-lbl">Food</span></button>
+  <button class="mob-nb" onclick="goMob('water')"     id="mnb-water">   <span class="m-ico">◈</span><span class="m-lbl">Water</span></button>
+  <button class="mob-nb" onclick="goMob('analytics')" id="mnb-analytics"><span class="m-ico">≈</span><span class="m-lbl">Stats</span></button>
+  <button class="mob-nb" onclick="goMob('history')"   id="mnb-history"> <span class="m-ico">◷</span><span class="m-lbl">History</span></button>
+  <button class="mob-nb" onclick="goMob('settings')"  id="mnb-settings"><span class="m-ico">⚙</span><span class="m-lbl">Settings</span></button>
+</nav>
 
 <!-- FAB -->
 <button class="coach-fab" id="coach-fab" onclick="toggleCoach()">
@@ -1681,6 +1751,13 @@ function showToast(type,title,msg){
 // ════════════════════════════════════════════
 //  NAVIGATION
 // ════════════════════════════════════════════
+// mobile nav syncs with desktop go()
+function goMob(name){
+  go(name);
+  document.querySelectorAll('.mob-nb').forEach(b=>b.classList.remove('act'));
+  document.getElementById('mnb-'+name)?.classList.add('act');
+}
+
 function go(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
