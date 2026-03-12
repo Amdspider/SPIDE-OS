@@ -2,8 +2,8 @@
   "name": "SPIDER",
   "short_name": "SPIDER",
   "description": "Personal Performance OS",
-  "start_url": "/apex-os/",
-  "scope": "/apex-os/",
+  "start_url": "/SPIDE-OS/",
+  "scope": "/SPIDE-OS/",
   "display": "standalone",
   "background_color": "#0a0a0b",
   "theme_color": "#0a0a0b",
@@ -23,3 +23,4 @@
     }
   ]
 }
+
